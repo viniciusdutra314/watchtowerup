@@ -22,15 +22,26 @@
       ...
     }:
     {
-      homeConfigurations.wt-laptop = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."vinicius@wt-laptop" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
            nix-flatpak.homeManagerModules.nix-flatpak
           ./wt-laptop/home.nix
         ];
       };
+      homeConfigurations."chloe@wt-devbox" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        modules = [ ./wt-devbox/home.nix ];
+      };
+      systemConfigs.devbox = system-manager.lib.makeSystemConfig {
+        modules = [ ./wt-devbox/system.nix ];
+      };
       systemConfigs.laptop = system-manager.lib.makeSystemConfig {
         modules = [ ./wt-laptop/system.nix ];
+      };
+      apps.x86_64-linux.home-manager = {
+        type = "app";
+        program = "${home-manager.packages.x86_64-linux.home-manager}/bin/home-manager";
       };
 
       apps.x86_64-linux.system-manager = {

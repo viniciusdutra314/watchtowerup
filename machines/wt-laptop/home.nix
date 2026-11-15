@@ -59,14 +59,15 @@
     zotero
   ];
 
-  programs.home-manager.enable = true;
-
   imports = [
+    ../common/home-manager.nix
+    ../common/git.nix
     ./sway.nix
     ../common/zsh.nix
     ./ssh.nix
     ./waybar.nix
     ../common/develop.nix
+    ../common/develop-desktop.nix
     ./commands.nix
     ./flatpaks.nix
   ];
