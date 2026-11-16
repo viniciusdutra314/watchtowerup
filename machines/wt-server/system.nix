@@ -6,7 +6,7 @@
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   environment.etc."nixos/flake.nix".source =
-  "/home/vinicius/watchtower-up/machines/flake.nix";
+  "/mnt/wt-core/watchtowerup/machines/flake.nix";
   boot.kernelModules = [
     "kvm-intel" #important for qemu/kvm
   ];
@@ -81,8 +81,8 @@ systemd.timers.auto-poweroff = {
   
   programs.bash.loginShellInit = ''
     if [[ $- == *i* && "$USER" == "vinicius" ]]; then
-      if [[ -d /home/vinicius/watchtower-up ]]; then
-        cd /home/vinicius/watchtower-up
+      if [[ -d /mnt/wt-core/watchtowerup ]]; then
+        cd /mnt/wt-core/watchtowerup
       fi
     fi
   '';
@@ -237,7 +237,7 @@ systemd.timers.auto-poweroff = {
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      WorkingDirectory = "/home/vinicius/watchtower-up/containers";
+      WorkingDirectory = "/mnt/wt-core/watchtowerup/containers";
     };
     script = ''
       docker compose up -d

@@ -45,7 +45,7 @@
     enableZshIntegration = true;
     settings = {
       background-opacity = 0.95;
-      working-directory = "${config.home.homeDirectory}/watchtower-up/machines";
+      working-directory = "/mnt/wt-core/watchtowerup/machines";
       window-inherit-working-directory = false;
       font-size = 18;
       term = "xterm-256color";

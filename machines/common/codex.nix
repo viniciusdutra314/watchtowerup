@@ -2,13 +2,13 @@
 {
   options.watchtower.codex.skillsDirectory = lib.mkOption {
     type = lib.types.str;
-    default = "${config.home.homeDirectory}/watchtower-up/chloe/skills";
+    default = "/mnt/wt-core/watchtowerup/chloe/skills";
     description = "Absolute path to the skills directory in the local Watchtower checkout.";
   };
 
   options.watchtower.codex.configFile = lib.mkOption {
     type = lib.types.str;
-    default = "${config.home.homeDirectory}/watchtower-up/machines/common/codex/config.toml";
+    default = "/mnt/wt-core/watchtowerup/machines/common/codex/config.toml";
     description = "Absolute path to the writable Codex config in the local Watchtower checkout.";
   };
 

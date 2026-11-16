@@ -2,7 +2,7 @@
 {
   options.watchtower.homeManager.repositoryDirectory = lib.mkOption {
     type = lib.types.str;
-    default = "${config.home.homeDirectory}/watchtower-up";
+    default = "/mnt/wt-core/watchtowerup";
     description = "Absolute path to the local Watchtower checkout.";
   };
 
