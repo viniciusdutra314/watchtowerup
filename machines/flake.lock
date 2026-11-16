@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "ai-voice-usage": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794849840,
+        "narHash": "sha256-rUzdtxbSXJ+1ltlyub3f2n4qqrI0cdUPv2keJFuCBao=",
+        "owner": "viniciusdutra314",
+        "repo": "AI-VoiceUsage",
+        "rev": "9219780cae976e86a6641800717d3eecdbb044df",
+        "type": "github"
+      },
+      "original": {
+        "owner": "viniciusdutra314",
+        "repo": "AI-VoiceUsage",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -144,6 +164,7 @@
     },
     "root": {
       "inputs": {
+        "ai-voice-usage": "ai-voice-usage",
         "home-manager": "home-manager",
         "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs",

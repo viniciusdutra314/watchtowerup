@@ -1,7 +1,21 @@
 
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
+  iconsDirectory = "${config.watchtower.homeManager.repositoryDirectory}/assets/icons";
+
+  switchLauncher = title: command:
+    let
+      script = pkgs.writeShellScript "${title}-switch" ''
+        ${config.home.profileDirectory}/bin/${command}
+        result=$?
+        printf '\nComando finalizado (código %s).\n' "$result"
+        read -r -p 'Pressione Enter para fechar… ' || true
+        exit "$result"
+      '';
+    in
+    "${pkgs.ghostty}/bin/ghostty --gtk-single-instance=false --title=${title} -e ${script}";
+
   confirm = label: command:
     pkgs.writeShellScript "wt-confirm-action" ''
       choice="$(
@@ -18,8 +32,35 @@ let
 in
 {
   xdg.desktopEntries = {
+    watchtowerup = {
+      name = "watchtowerup";
+      comment = "Editar configurações no Zed · chloe@wt-devbox · workspace 5";
+      icon = "${iconsDirectory}/watchtowerup.svg";
+      exec = "${pkgs.zed-editor}/bin/zeditor ssh://chloe@wt-devbox/mnt/wt-core/watchtowerup";
+      categories = [ "Development" ];
+      settings.Keywords = "watchtower;watchtowerup;zed;nix;configuração;";
+    };
+
+    wt-home-manager-switch = {
+      name = "home-manager";
+      comment = "Aplicar a configuração do usuário neste computador";
+      icon = "${iconsDirectory}/home-manager.svg";
+      exec = switchLauncher "home-manager" "home-manager switch";
+      categories = [ "System" ];
+      settings.Keywords = "home-manager;switch;nix;aplicar;configuração;";
+    };
+
+    wt-system-manager-switch = {
+      name = "system-manager";
+      comment = "Aplicar a configuração do sistema neste computador (solicita senha)";
+      icon = "${iconsDirectory}/system-manager.svg";
+      exec = switchLauncher "system-manager" "system-manager switch --sudo";
+      categories = [ "System" ];
+      settings.Keywords = "system-manager;switch;nix;sudo;aplicar;configuração;";
+    };
+
     wt-shutdown = {
-      name = "Shutdown";
+      name = "shutdown";
       icon = "system-shutdown";
       exec = "${confirm "Desligar" "${pkgs.systemd}/bin/systemctl poweroff"}";
       categories = [ "System" ];
@@ -27,7 +68,7 @@ in
     };
 
     wt-reboot = {
-      name = "Reboot";
+      name = "reboot";
       icon = "system-reboot";
       exec = "${confirm "Reiniciar" "${pkgs.systemd}/bin/systemctl reboot"}";
       categories = [ "System" ];
@@ -35,7 +76,7 @@ in
     };
 
     wt-suspend = {
-      name = "Suspend";
+      name = "suspend";
       icon = "system-suspend";
       exec = "${pkgs.systemd}/bin/systemctl suspend";
       categories = [ "System" ];
@@ -43,7 +84,7 @@ in
     };
 
     wt-logout = {
-      name = "Logout";
+      name = "logout";
       icon = "system-log-out";
       exec = "${confirm "Sair do Sway" "${pkgs.sway}/bin/swaymsg exit"}";
       categories = [ "System" ];

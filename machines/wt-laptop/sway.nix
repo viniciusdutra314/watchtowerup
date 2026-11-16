@@ -1,4 +1,4 @@
-{pkgs,lib, ... }:
+{config,pkgs,lib, ... }:
 
 let
   mod = "Mod4";
@@ -60,7 +60,7 @@ in
       input."type:keyboard".xkb_layout = "br";
 
       output = {
-        "*".bg = "${./wallpapers/forest.jpg} fill";
+        "*".bg = "${config.watchtower.homeManager.repositoryDirectory}/assets/wallpapers/forest.jpg fill";
         "eDP-1" = {
           mode = "1920x1080@60Hz";
           position = "0 0";
@@ -91,9 +91,9 @@ in
           { app_id = "ai-voice-usage"; }
         ];
         "2" = [
-          { app_id = "dev.zed.Zed"; }
           { app_id = "codium"; } 
         ];
+        "5" = [ { app_id = "dev.zed.Zed";} ];
         "9" = [ { app_id = "org.mozilla.thunderbird"; } ];
         "10" = [
           { app_id = "org.telegram.desktop"; }
@@ -108,6 +108,7 @@ in
         "Telegram"
         "zapzap"
         "ai-voice-usage"
+        "${pkgs.zed-editor}/bin/zeditor --new ssh://chloe@wt-devbox/mnt/wt-core/watchtowerup"
       ];
       
 

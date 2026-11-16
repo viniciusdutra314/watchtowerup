@@ -1,5 +1,14 @@
 { config, pkgs, ... }:
 {
+  xdg.desktopEntries.ai-voice-usage = {
+    name = "AI-VoiceUsage";
+    comment = "Track ChatGPT Voice usage over the last 24 hours";
+    exec = "ai-voice-usage";
+    icon = "appointment-soon";
+    categories = [ "Utility" ];
+    terminal = false;
+  };
+
   programs.zed-editor = {
     enable = true;
     package = pkgs.zed-editor;

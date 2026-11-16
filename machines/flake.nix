@@ -1,6 +1,10 @@
 {
   description = "Watchtower Infrastructure";
   inputs = {
+    ai-voice-usage = {
+      url = "github:viniciusdutra314/AI-VoiceUsage";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -19,6 +23,7 @@
       home-manager,
       system-manager,
       nix-flatpak,
+      ai-voice-usage,
       ...
     }:
     let
@@ -36,6 +41,7 @@
         modules = [
           standaloneManagers
            nix-flatpak.homeManagerModules.nix-flatpak
+          { home.packages = [ ai-voice-usage.packages.${pkgs.stdenv.hostPlatform.system}.default ]; }
           ./wt-laptop/home.nix
         ];
       };
