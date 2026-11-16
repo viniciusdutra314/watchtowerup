@@ -5,6 +5,8 @@
     ./hardware-configuration.nix
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  environment.etc."nixos/flake.nix".source =
+  "/home/vinicius/watchtower-up/machines/flake.nix";
   boot.kernelModules = [
     "kvm-intel" #important for qemu/kvm
   ];
@@ -79,8 +81,8 @@ systemd.timers.auto-poweroff = {
   
   programs.bash.loginShellInit = ''
     if [[ $- == *i* && "$USER" == "vinicius" ]]; then
-      if [[ -d /home/vinicius/watchtower-infrastructure ]]; then
-        cd /home/vinicius/watchtower-infrastructure
+      if [[ -d /home/vinicius/watchtower-up ]]; then
+        cd /home/vinicius/watchtower-up
       fi
     fi
   '';
@@ -105,8 +107,10 @@ systemd.timers.auto-poweroff = {
     variant = "";
   };
   console.keyMap = "br-abnt2";
+  programs.zsh.enable = true;
   users.users."vinicius" = {
     isNormalUser = true;
+    shell = pkgs.zsh;
     linger = true;
     description = "vinicius";
     extraGroups = [
@@ -120,21 +124,10 @@ systemd.timers.auto-poweroff = {
   };
 
   environment.systemPackages = with pkgs; [
-    gh
     usbutils
-    psmisc
     qemu
-    neovim
     python314
     smartmontools
-    btop
-    cloc
-    git
-    tree
-    fastfetch
-    wget
-    nixd
-    nixfmt
   ];
   
  virtualisation.libvirtd = {
@@ -244,17 +237,17 @@ systemd.timers.auto-poweroff = {
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      WorkingDirectory = "/home/vinicius/watchtower-infrastructure/containers";
+      WorkingDirectory = "/home/vinicius/watchtower-up/containers";
     };
     script = ''
       docker compose up -d
 
-      case "$(virsh -c qemu:///system domstate wt-dev)" in
+      case "$(virsh -c qemu:///system domstate wt-devbox)" in
         "shut off")
-          virsh -c qemu:///system start wt-dev
+          virsh -c qemu:///system start wt-devbox
           ;;
         running)
-          echo "wt-dev already running"
+          echo "wt-devbox already running"
           ;;
         *)
           echo "Unexpected VM state" >&2

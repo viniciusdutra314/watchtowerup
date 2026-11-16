@@ -67,6 +67,7 @@
     ./ssh.nix
     ./waybar.nix
     ../common/develop.nix
+    ../common/cli.nix
     ../common/develop-desktop.nix
     ./commands.nix
     ./flatpaks.nix

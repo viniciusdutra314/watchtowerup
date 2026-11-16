@@ -4,6 +4,7 @@
     ../common/git.nix
     ../common/zsh.nix
     ../common/develop.nix
+    ../common/cli.nix
     ../common/codex.nix
     ../common/home-manager.nix
     ../wt-laptop/ssh.nix

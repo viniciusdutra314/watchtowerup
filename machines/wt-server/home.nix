@@ -1,6 +1,8 @@
 { ... }:
 {
   imports = [
+    ../common/cli.nix
+    ../common/develop.nix
     ../common/git.nix
     ../common/zsh.nix
     ../common/home-manager.nix
