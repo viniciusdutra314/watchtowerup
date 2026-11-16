@@ -33,6 +33,17 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [ ./wt-devbox/home.nix ];
       };
+      nixosConfigurations.wt-server = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./wt-server/system.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.users.vinicius = import ./wt-server/home.nix;
+          }
+        ];
+      };
       systemConfigs.devbox = system-manager.lib.makeSystemConfig {
         modules = [ ./wt-devbox/system.nix ];
       };
