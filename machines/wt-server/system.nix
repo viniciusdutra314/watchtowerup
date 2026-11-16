@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
 
+let
+  IP_WT-LAPTOP = "100.122.93.55";
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -183,9 +186,9 @@ systemd.timers.auto-poweroff = {
   services.nfs.server = {
   	enable = true;
   exports = ''
-    /mnt/wt-core    100.122.93.55/32(rw,sync,root_squash,no_subtree_check,mp,fsid=101)
-    /mnt/wt-library 100.122.93.55/32(rw,sync,root_squash,no_subtree_check,mp,fsid=102)
-    /mnt/wt-personal 100.122.93.55/32(rw,sync,root_squash,no_subtree_check,mp,fsid=103)
+    /mnt/wt-core    ${IP_WT-LAPTOP}/32(rw,sync,root_squash,no_subtree_check,mp,fsid=101)
+    /mnt/wt-library ${IP_WT-LAPTOP}/32(rw,sync,root_squash,no_subtree_check,mp,fsid=102)
+    /mnt/wt-personal ${IP_WT-LAPTOP}/32(rw,sync,root_squash,no_subtree_check,mp,fsid=103)
   '';
    };
    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 2049 ];

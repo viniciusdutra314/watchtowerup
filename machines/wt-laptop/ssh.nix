@@ -23,8 +23,8 @@
         IdentitiesOnly = true;
       };
 
-      wt-dev = {
-        HostName = "wt-dev";
+      wt-devbox = {
+        HostName = "wt-devbox";
         User = "chloe";
         IdentityFile = DefaultIdentityFile;
         IdentitiesOnly = true;

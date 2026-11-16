@@ -21,17 +21,27 @@
       nix-flatpak,
       ...
     }:
+    let
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      homeManager = home-manager.packages.x86_64-linux.home-manager;
+      systemManager = system-manager.packages.x86_64-linux.default;
+      standaloneManagers = {
+        # Home Manager installs its own CLI through programs.home-manager.enable.
+        home.packages = [ systemManager ];
+      };
+    in
     {
       homeConfigurations."vinicius@wt-laptop" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
+          standaloneManagers
            nix-flatpak.homeManagerModules.nix-flatpak
           ./wt-laptop/home.nix
         ];
       };
       homeConfigurations."chloe@wt-devbox" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        modules = [ ./wt-devbox/home.nix ];
+        modules = [ standaloneManagers ./wt-devbox/home.nix ];
       };
       nixosConfigurations.wt-server = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -44,20 +54,24 @@
           }
         ];
       };
-      systemConfigs.devbox = system-manager.lib.makeSystemConfig {
+      systemConfigs.wt-devbox = system-manager.lib.makeSystemConfig {
         modules = [ ./wt-devbox/system.nix ];
       };
-      systemConfigs.laptop = system-manager.lib.makeSystemConfig {
+      systemConfigs.wt-laptop = system-manager.lib.makeSystemConfig {
         modules = [ ./wt-laptop/system.nix ];
       };
       apps.x86_64-linux.home-manager = {
         type = "app";
-        program = "${home-manager.packages.x86_64-linux.home-manager}/bin/home-manager";
+        program = "${homeManager}/bin/home-manager";
       };
 
       apps.x86_64-linux.system-manager = {
         type = "app";
-        program = "${system-manager.packages.x86_64-linux.default}/bin/system-manager";
+        program = "${systemManager}/bin/system-manager";
+      };
+
+      devShells.x86_64-linux.bootstrap = pkgs.mkShellNoCC {
+        packages = [ homeManager systemManager ];
       };
 
     };

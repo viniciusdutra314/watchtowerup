@@ -12,5 +12,8 @@
     # Let the standard CLI discover the writable checkout from any directory.
     xdg.configFile."home-manager".source = config.lib.file.mkOutOfStoreSymlink
       "${config.watchtower.homeManager.repositoryDirectory}/machines";
+
+    home.file.".config/system-manager".source = config.lib.file.mkOutOfStoreSymlink
+      "${config.watchtower.homeManager.repositoryDirectory}/machines";
   };
 }

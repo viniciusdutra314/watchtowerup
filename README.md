@@ -10,21 +10,28 @@ It manages configurations for my home server, virtual machines, and personal com
 
 ### Bootstrapping
 
-Should work on any reasonable Linux distribution with Nix installed and flakes enabled.
-Home Manager does not need to be installed beforehand (hence the bootstrapping). The configuration is
-selected automatically by `user@hostname`.
-
-We use NFS and virtiofs to share a single physical checkout across PCs and VMs,
-always at `/mnt/wt-core/watchtowerup` (This is our **single source of truth**)
+On non-NixOS Linux, start with multi-user Nix, flakes enabled,
+and systemd. The shared checkout lives at `/mnt/wt-core/watchtowerup`.
 
 ```sh
 nix shell nixpkgs#git
 git clone https://github.com/viniciusdutra314/watchtowerup /mnt/wt-core/watchtowerup
 cd /mnt/wt-core/watchtowerup/machines
-nix run path:.#home-manager -- switch --flake path:.
+nix develop path:.#bootstrap
+home-manager switch --flake path:.
+system-manager switch --sudo
+exit
+```
+Both managers remain installed after bootstrap. In a new login session, apply
+changes from any directory. Home Manager selects by `user@hostname`;
+System Manager selects by hostname:
+
+```sh
+home-manager switch
+system-manager switch --sudo
 ```
 
-After bootstrap, run `home-manager switch` from any directory to apply changes.
+System Manager requests administrator privileges when applying system changes.
 
 ### Chloe — AI Agent
 
