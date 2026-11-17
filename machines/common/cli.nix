@@ -6,6 +6,7 @@
     fastfetch
     imagemagick
     jq
+    speedtest-cli
     neovim
     psmisc
     ripgrep

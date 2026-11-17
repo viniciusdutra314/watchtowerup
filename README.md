@@ -8,6 +8,9 @@
 
 It manages configurations for my home server, virtual machines, and personal computers. The server also hosts docker containers, with declarative configurations for easy deployment and maintenance. Everything is versioned in Git, while persistent data and secrets are kept separate from the repository.
 
+> [!WARNING]
+> This configuration is intended for my use and must not be used unchanged by anyone else. Hostnames and usernames are hardcoded, review and adapt the configuration to your own environment before applying it.
+
 ### Bootstrapping
 
 On non-NixOS Linux, start with multi-user Nix, flakes enabled,

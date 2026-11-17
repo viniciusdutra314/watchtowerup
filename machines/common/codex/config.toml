@@ -9,6 +9,7 @@ sandbox_mode = "workspace-write"
 network_access = true
 
 [features]
+daemon_auto_start = true
 memories = true
 
 [memories]
