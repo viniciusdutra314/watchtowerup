@@ -14,6 +14,8 @@
     package = pkgs.zed-editor;
     mutableUserSettings = true;
     extensions = [
+      "catppuccin"
+      "catppuccin-icons"
       "nix"
       "typst"
       "toml"
@@ -23,6 +25,8 @@
       nixfmt
     ];
     userSettings = {
+      theme = "Catppuccin Frappé";
+      icon_theme = "Catppuccin Frappé";
       disable_ai = true;
       telemetry = {
         metrics = false;

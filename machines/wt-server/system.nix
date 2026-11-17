@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  IP_WT-LAPTOP = "100.122.93.55";
+  IP_WT-LAPTOP = "100.90.150.48";
 in
 {
   imports = [
