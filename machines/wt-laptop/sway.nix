@@ -1,10 +1,21 @@
-{config,pkgs,lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   mod = "Mod4";
 in
 {
-   programs.fuzzel = {
+  xdg.configFile."xdg-desktop-portal/sway-portals.conf".text = ''
+    [preferred]
+    default=gtk
+    org.freedesktop.impl.portal.Screenshot=wlr
+    org.freedesktop.impl.portal.ScreenCast=wlr
+  '';
+  programs.fuzzel = {
     enable = true;
 
     settings = {
@@ -40,7 +51,7 @@ in
   wayland.windowManager.sway = {
     enable = true;
     package = null;
-    systemd.enable = false;
+    systemd.enable = true;
 
     config = {
       modifier = mod;
@@ -110,7 +121,6 @@ in
         "ai-voice-usage"
         "${pkgs.zed-editor}/bin/zeditor --new ssh://chloe@wt-devbox/mnt/wt-core/watchtowerup"
       ];
-      
 
       keybindings = lib.mkOptionDefault {
         "${mod}+Return" = "exec env GTK_IM_MODULE=simple ghostty --gtk-single-instance=false";
@@ -124,12 +134,11 @@ in
 
     extraConfig = ''
       set $mod ${mod}
+      exec ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
       exec swayidle -w \
         timeout 1800 'swaylock -f' \
         timeout 1800 'systemd-ac-power || systemctl suspend' \
         before-sleep 'swaylock -f'
-
-      include '$(/usr/libexec/sway/layered-include "/usr/share/sway/config.d/*.conf" "/etc/sway/config.d/*.conf" "''${XDG_CONFIG_HOME:-$HOME/.config}/sway/config.d/*.conf")'
     '';
   };
 }

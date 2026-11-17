@@ -27,6 +27,9 @@
       ...
     }:
     let
+      sharedArgs = {
+        IP_WT-LAPTOP = "100.90.150.48";
+      };
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       homeManager = home-manager.packages.x86_64-linux.home-manager;
       systemManager = system-manager.packages.x86_64-linux.default;
@@ -37,6 +40,7 @@
     in
     {
       homeConfigurations."vinicius@wt-laptop" = home-manager.lib.homeManagerConfiguration {
+        extraSpecialArgs = sharedArgs;
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
           standaloneManagers
@@ -46,24 +50,29 @@
         ];
       };
       homeConfigurations."chloe@wt-devbox" = home-manager.lib.homeManagerConfiguration {
+        extraSpecialArgs = sharedArgs;
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [ standaloneManagers ./wt-devbox/home.nix ];
       };
       nixosConfigurations.wt-server = nixpkgs.lib.nixosSystem {
+        specialArgs = sharedArgs;
         system = "x86_64-linux";
         modules = [
           ./wt-server/system.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
+            home-manager.extraSpecialArgs = sharedArgs;
             home-manager.users.vinicius = import ./wt-server/home.nix;
           }
         ];
       };
       systemConfigs.wt-devbox = system-manager.lib.makeSystemConfig {
+        specialArgs = sharedArgs;
         modules = [ ./wt-devbox/system.nix ];
       };
       systemConfigs.wt-laptop = system-manager.lib.makeSystemConfig {
+        specialArgs = sharedArgs;
         modules = [ ./wt-laptop/system.nix ];
       };
       apps.x86_64-linux.home-manager = {

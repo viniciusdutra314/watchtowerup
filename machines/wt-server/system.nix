@@ -1,8 +1,4 @@
-{ config, pkgs, ... }:
-
-let
-  IP_WT-LAPTOP = "100.90.150.48";
-in
+{ config, pkgs, IP_WT-LAPTOP, ... }:
 {
   imports = [
     ./hardware-configuration.nix
