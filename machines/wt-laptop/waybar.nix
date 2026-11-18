@@ -1,8 +1,7 @@
 { pkgs, lib, ... }:
 
 let
-  # Forçar fonte para caracteres que não renderizam corretamente.
-  punctuation = char: "<span font_family='DejaVu Sans'>${char}</span>";
+  icon = glyph: "<span font_family='Font Awesome 7 Free Solid'>${glyph}</span>";
 
   watchtowerStatus = pkgs.writeShellScript "watchtower-status" ''
     if ! status="$(${pkgs.tailscale}/bin/tailscale status --json 2>/dev/null)"; then
@@ -10,14 +9,14 @@ let
     elif echo "$status" | ${pkgs.jq}/bin/jq -e \
       'any(.Peer[]?; .HostName == "watchtower" and .Online == true)' \
       >/dev/null 2>&1; then
-      echo '{"text":"WT <span font_family=\"DejaVu Sans\">●</span>","class":"online","tooltip":"Watchtower online no Tailscale"}'
+      echo '{"text":"WT ●","class":"online","tooltip":"Watchtower online no Tailscale"}'
     else
-      echo '{"text":"WT <span font_family=\"DejaVu Sans\">●</span>","class":"offline","tooltip":"Watchtower offline no Tailscale"}'
+      echo '{"text":"WT ●","class":"offline","tooltip":"Watchtower offline no Tailscale"}'
     fi
   '';
 in
 {
-  home.packages = [ pkgs.font-awesome ];
+  home.packages = [ pkgs.dejavu_fonts pkgs.font-awesome ];
   fonts.fontconfig.enable = true;
 
   programs.waybar = {
@@ -73,18 +72,18 @@ in
       };
 
       cpu = {
-        format = " {usage}${punctuation "%"}";
+        format = "${icon ""} {usage}%";
         interval = 5;
       };
 
       memory = {
-        format = " {percentage}${punctuation "%"}";
+        format = "${icon ""} {percentage}%";
         interval = 10;
       };
 
       pulseaudio = {
-        format = "{icon} {volume}${punctuation "%"}";
-        format-muted = " Mute";
+        format = "${icon "{icon}"} {volume}%";
+        format-muted = "${icon ""} Mute";
         format-icons.default = [
           ""
           ""
@@ -95,7 +94,7 @@ in
       };
 
       "power-profiles-daemon" = {
-        format = "{icon}";
+        format = icon "{icon}";
         tooltip-format = "Perfil de energia: {profile}";
         format-icons = {
           "power-saver" = "";
@@ -105,9 +104,9 @@ in
       };
 
       battery = {
-        format = "{icon} {capacity}${punctuation "%"}";
-        format-charging = " {icon} {capacity}${punctuation "%"}";
-        format-plugged = " {icon} {capacity}${punctuation "%"}";
+        format = "${icon "{icon}"} {capacity}%";
+        format-charging = "${icon " {icon}"} {capacity}%";
+        format-plugged = "${icon " {icon}"} {capacity}%";
         format-full = "";
         format-icons = [
           ""
@@ -123,13 +122,13 @@ in
       tray.spacing = 8;
 
       "clock#date" = {
-        format = " {0:%d}${punctuation "/"}{0:%m}${punctuation "/"}{0:%Y}";
+        format = "${icon ""} {0:%d/%m/%Y}";
         tooltip-format = "{:%A, %d de %B de %Y}";
         on-click = "flatpak run org.mozilla.thunderbird -calendar";
       };
 
       "clock#time" = {
-        format = " {0:%H}${punctuation ":"}{0:%M}";
+        format = "${icon ""} {0:%H:%M}";
         tooltip = false;
         on-click = "flatpak run org.mozilla.thunderbird -calendar";
       };
@@ -149,7 +148,7 @@ in
       @define-color yellow #e5c890;
 
       * {
-        font-family: "DejaVu Sans", "Font Awesome 7 Free", "Font Awesome 6 Free";
+        font-family: "DejaVu Sans", sans-serif;
         font-size: 12px;
         border: none;
       }

@@ -15,6 +15,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
      nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.8.0";
+    vocalinux = {
+      url = "github:VocaHQ/vocalinux/v0.18.6";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   
   outputs =
@@ -24,6 +28,7 @@
       system-manager,
       nix-flatpak,
       ai-voice-usage,
+      vocalinux,
       ...
     }:
     let
@@ -40,12 +45,14 @@
     in
     {
       homeConfigurations."vinicius@wt-laptop" = home-manager.lib.homeManagerConfiguration {
-        extraSpecialArgs = sharedArgs;
+        extraSpecialArgs = sharedArgs // { inherit vocalinux; };
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
           standaloneManagers
            nix-flatpak.homeManagerModules.nix-flatpak
           { home.packages = [ ai-voice-usage.packages.${pkgs.stdenv.hostPlatform.system}.default ]; }
+          vocalinux.homeManagerModules.vocalinux
+          ./wt-laptop/vocalinux.nix
           ./wt-laptop/home.nix
         ];
       };

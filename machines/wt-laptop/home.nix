@@ -18,21 +18,14 @@
   targets.genericLinux.enable = true; # make GPU acceleration work
   home.sessionVariables.GTK_IM_MODULE = "simple"; # make ~ work in ghostty
 
-  home.file = {
-    ".local/bin/wt-codium" = {
-      source = ../scripts/wt-codium.py;
-      executable = true;
-    };
-
-    ".local/bin/overenginerring-calculator" = {
+  home.file = let
+    calculator = {
       source = ../scripts/overenginerring-calculator.py;
       executable = true;
     };
-
-    ".local/bin/wt-zed" = {
-      source = ../scripts/wt-zed.py;
-      executable = true;
-    };
+  in {
+    ".local/bin/over-engineering-calculator" = calculator;
+    ".local/bin/overenginerring-calculator" = calculator;
   };
 
   home.sessionPath = [
@@ -49,7 +42,9 @@
     gnome-clocks
     gnome-network-displays
     kdePackages.okular
+    libreoffice
     obs-studio
+    parabolic
     saber
     telegram-desktop
     virt-manager

@@ -3,11 +3,16 @@
 
 let
   iconsDirectory = ../assets/icons;
+  calculatorIcon = pkgs.runCommand "over-engineering-calculator.png" {
+    nativeBuildInputs = [ pkgs.librsvg ];
+  } ''
+    rsvg-convert --output "$out" ${iconsDirectory}/over-engineering-calculator.svg
+  '';
 
-  switchLauncher = title: command:
+  terminalLauncher = title: command:
     let
-      script = pkgs.writeShellScript "${title}-switch" ''
-        ${config.home.profileDirectory}/bin/${command}
+      script = pkgs.writeShellScript "${title}-launcher" ''
+        ${command}
         result=$?
         printf '\nComando finalizado (código %s).\n' "$result"
         read -r -p 'Pressione Enter para fechar… ' || true
@@ -31,21 +36,45 @@ let
     '';
 in
 {
+  programs.vscodium.profiles.default.extensions = [
+    (pkgs.vscode-utils.buildVscodeMarketplaceExtension rec {
+      mktplcRef = {
+        publisher = "jeanp413";
+        name = "open-remote-ssh";
+        version = "0.6.2";
+      };
+      vsix = pkgs.fetchurl {
+        url = "https://open-vsx.org/api/jeanp413/open-remote-ssh/${mktplcRef.version}/file/jeanp413.open-remote-ssh-${mktplcRef.version}.vsix";
+        hash = "sha256-DvlV63bVU2Y74W4noYFPpOyl+XYMvHyVh05IXH8zYkg=";
+      };
+    })
+  ];
+
   xdg.desktopEntries = {
+    over-engineering-calculator = {
+      name = "over-engineering-calculator";
+      comment = "Calcular em quanto tempo uma automação se paga";
+      icon = "${calculatorIcon}";
+      exec = terminalLauncher "over-engineering-calculator"
+        "${pkgs.python3}/bin/python3 ${../scripts/overenginerring-calculator.py}";
+      categories = [ "Utility" "Calculator" ];
+      settings.Keywords = "calculadora;calculator;engenharia;automação;overengineering;";
+    };
+
     watchtowerup = {
       name = "watchtowerup";
-      comment = "Editar configurações no Zed · chloe@wt-devbox · workspace 5";
+      comment = "Editar configurações no VSCodium · chloe@wt-devbox · workspace 5";
       icon = "${iconsDirectory}/watchtowerup.svg";
-      exec = "${pkgs.zed-editor}/bin/zeditor ssh://chloe@wt-devbox/mnt/wt-core/watchtowerup";
+      exec = "${pkgs.vscodium}/bin/codium --folder-uri vscode-remote://ssh-remote+wt-devbox/mnt/wt-core/watchtowerup";
       categories = [ "Development" ];
-      settings.Keywords = "watchtower;watchtowerup;zed;nix;configuração;";
+      settings.Keywords = "watchtower;watchtowerup;vscodium;nix;configuração;";
     };
 
     wt-home-manager-switch = {
       name = "home-manager";
       comment = "Aplicar a configuração do usuário neste computador";
       icon = "${iconsDirectory}/home-manager.svg";
-      exec = switchLauncher "home-manager" "home-manager switch";
+      exec = terminalLauncher "home-manager" "${config.home.profileDirectory}/bin/home-manager switch";
       categories = [ "System" ];
       settings.Keywords = "home-manager;switch;nix;aplicar;configuração;";
     };
@@ -54,7 +83,7 @@ in
       name = "system-manager";
       comment = "Aplicar a configuração do sistema neste computador (solicita senha)";
       icon = "${iconsDirectory}/system-manager.svg";
-      exec = switchLauncher "system-manager" "system-manager switch --sudo";
+      exec = terminalLauncher "system-manager" "${config.home.profileDirectory}/bin/system-manager switch --sudo";
       categories = [ "System" ];
       settings.Keywords = "system-manager;switch;nix;sudo;aplicar;configuração;";
     };

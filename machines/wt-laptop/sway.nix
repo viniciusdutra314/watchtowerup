@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   ...
@@ -62,6 +63,13 @@ in
         titlebar = false;
         border = 3;
         hideEdgeBorders = "--i3 both";
+        commands = [
+          {
+            # O título pode chegar depois que a janela remota for criada.
+            criteria = { app_id = "codium"; title = "(^| - )watchtowerup( - | \\[|$)"; };
+            command = "move container to workspace number 5";
+          }
+        ];
       };
       gaps = {
         smartBorders = "on";
@@ -100,10 +108,7 @@ in
           { app_id = "org.mozilla.firefox"; }
           { app_id = "ai-voice-usage"; }
         ];
-        "2" = [
-          { app_id = "codium"; } 
-        ];
-        "5" = [ { app_id = "dev.zed.Zed";} ];
+        "2" = [ { app_id = "codium"; } ];
         "9" = [ { app_id = "org.mozilla.thunderbird"; } ];
         "10" = [
           { app_id = "org.telegram.desktop"; }
@@ -118,7 +123,7 @@ in
         "Telegram"
         "zapzap"
         "ai-voice-usage"
-        "${pkgs.zed-editor}/bin/zeditor --new ssh://chloe@wt-devbox/mnt/wt-core/watchtowerup"
+        config.xdg.desktopEntries.watchtowerup.exec
       ];
 
       keybindings = lib.mkOptionDefault {

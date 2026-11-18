@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   xdg.desktopEntries.ai-voice-usage = {
     name = "AI-VoiceUsage";
@@ -9,44 +9,6 @@
     terminal = false;
   };
 
-  programs.zed-editor = {
-    enable = true;
-    package = pkgs.zed-editor;
-    mutableUserSettings = true;
-    extensions = [
-      "catppuccin"
-      "catppuccin-icons"
-      "nix"
-      "typst"
-      "toml"
-    ];
-    extraPackages = with pkgs; [
-      nixd
-      nixfmt
-    ];
-    userSettings = {
-      theme = "Catppuccin Frappé";
-      icon_theme = "Catppuccin Frappé";
-      disable_ai = true;
-      telemetry = {
-        metrics = false;
-        diagnostics = false;
-      };
-      load_direnv = "direct";
-      languages.Nix = {
-        language_servers = [
-          "nixd"
-          "!nil"
-        ];
-        format_on_save = "on";
-
-        formatter.external = {
-          command = "nixfmt";
-          arguments = [ ];
-        };
-      };
-    };
-  };
   programs.vscodium = {
     enable = true;
     package = pkgs.vscodium;
