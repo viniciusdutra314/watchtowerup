@@ -15,6 +15,7 @@
     ];
 
     packages = [
+      "org.audacityteam.Audacity"
       "org.mozilla.thunderbird"
       "com.spotify.Client"
       "org.gnome.Boxes"

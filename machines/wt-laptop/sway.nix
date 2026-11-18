@@ -7,8 +7,32 @@
 
 let
   mod = "Mod4";
+  watchtowerTitle = "(^| [-—] |/)(?i:watchtowerup)($|[[:space:]])";
+  watchtowerWindow = {
+    app_id = "^codium$";
+    title = watchtowerTitle;
+  };
+  watchtowerCriteria = ''[app_id="${watchtowerWindow.app_id}" title="${watchtowerWindow.title}"]'';
+  swaymsg = "${pkgs.sway}/bin/swaymsg";
+  moveWatchtowerWindow = "move container to workspace number 5";
+  openWatchtower = "${pkgs.vscodium}/bin/codium --ozone-platform=wayland --folder-uri vscode-remote://ssh-remote+wt-devbox/mnt/wt-core/watchtowerup";
+  watchtowerLauncher = pkgs.writeShellScript "open-watchtowerup" ''
+    if [ -z "$SWAYSOCK" ]; then
+      exec ${openWatchtower}
+    fi
+
+    if ${swaymsg} --quiet '${watchtowerCriteria} ${moveWatchtowerWindow}, focus'; then
+      exit 0
+    fi
+
+    exec ${swaymsg} --quiet 'workspace --no-auto-back-and-forth number 5; exec ${openWatchtower} --new-window'
+  '';
 in
 {
+  home.packages = [ pkgs.nwg-displays ];
+
+  xdg.desktopEntries.watchtowerup.exec = "${watchtowerLauncher}";
+
   xdg.configFile."xdg-desktop-portal/sway-portals.conf".text = ''
     [preferred]
     default=gtk
@@ -66,8 +90,8 @@ in
         commands = [
           {
             # O título pode chegar depois que a janela remota for criada.
-            criteria = { app_id = "codium"; title = "(^| - )watchtowerup( - | \\[|$)"; };
-            command = "move container to workspace number 5";
+            criteria = watchtowerWindow;
+            command = moveWatchtowerWindow;
           }
         ];
       };
@@ -123,7 +147,7 @@ in
         "Telegram"
         "zapzap"
         "ai-voice-usage"
-        config.xdg.desktopEntries.watchtowerup.exec
+        openWatchtower
       ];
 
       keybindings = lib.mkOptionDefault {

@@ -65,7 +65,6 @@ in
       name = "watchtowerup";
       comment = "Editar configurações no VSCodium · chloe@wt-devbox · workspace 5";
       icon = "${iconsDirectory}/watchtowerup.svg";
-      exec = "${pkgs.vscodium}/bin/codium --folder-uri vscode-remote://ssh-remote+wt-devbox/mnt/wt-core/watchtowerup";
       categories = [ "Development" ];
       settings.Keywords = "watchtower;watchtowerup;vscodium;nix;configuração;";
     };
