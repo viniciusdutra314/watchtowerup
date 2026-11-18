@@ -2,7 +2,7 @@
 { config, pkgs, ... }:
 
 let
-  iconsDirectory = "${config.watchtower.homeManager.repositoryDirectory}/assets/icons";
+  iconsDirectory = ../assets/icons;
 
   switchLauncher = title: command:
     let

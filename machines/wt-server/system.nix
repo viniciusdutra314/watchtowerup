@@ -1,24 +1,31 @@
-{ config, pkgs, IP_WT-LAPTOP, ... }:
+{
+  config,
+  pkgs,
+  IP_WT-LAPTOP,
+  ...
+}:
 {
   imports = [
     ./hardware-configuration.nix
   ];
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  environment.etc."nixos/flake.nix".source =
-  "/mnt/wt-core/watchtowerup/machines/flake.nix";
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+  environment.etc."nixos/flake.nix".source = "/mnt/wt-core/watchtowerup/machines/flake.nix";
   boot.kernelModules = [
-    "kvm-intel" #important for qemu/kvm
+    "kvm-intel" # important for qemu/kvm
   ];
   boot.kernelParams = [
     "usb-storage.quirks=0bda:9210:u"
   ];
-  
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd = {
     availableKernelModules = [
-      "r8169" #ethernet cable driver
+      "r8169" # ethernet cable driver
     ];
     network = {
       enable = true;
@@ -29,7 +36,7 @@
           "/etc/secrets/initrd/ssh_host_ed25519_key"
         ];
         authorizedKeys = [
-          ''command="systemctl default" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIALu7q6/1Huhb+QU4h9ymJ/kkzZwkjWee1N7wos45eCN watchtower initrd''
+          ''command="systemctl default" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQLLIm5lkUC0PX86Hrs9H87VDKoNJFnZd7Oc46Tp55c watchtower initrd''
         ];
       };
     };
@@ -50,34 +57,36 @@
       };
     };
   };
- swapDevices = [{
-  device = "/var/lib/swapfile";
-  size = 32*1024; # 32 GiB
- }];
- boot.zswap.enable = true;
-# Desligamento automático à meia-noite
-systemd.services.auto-poweroff = {
-  description = "Automatic shutdown at midnight";
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 32 * 1024; # 32 GiB
+    }
+  ];
+  boot.zswap.enable = true;
+  # Desligamento automático à meia-noite
+  systemd.services.auto-poweroff = {
+    description = "Automatic shutdown at midnight";
 
-  serviceConfig.Type = "oneshot";
+    serviceConfig.Type = "oneshot";
 
-  script = ''
-    ${pkgs.systemd}/bin/systemctl --no-block poweroff
-  '';
-};
-
-systemd.timers.auto-poweroff = {
-  description = "Daily midnight shutdown";
-
-  wantedBy = [ "timers.target" ];
-
-  timerConfig = {
-    OnCalendar = "*-*-* 00:00:00";
-    AccuracySec = "1s";
-    Persistent = false;
+    script = ''
+      ${pkgs.systemd}/bin/systemctl --no-block poweroff
+    '';
   };
-};
-  
+
+  systemd.timers.auto-poweroff = {
+    description = "Daily midnight shutdown";
+
+    wantedBy = [ "timers.target" ];
+
+    timerConfig = {
+      OnCalendar = "*-*-* 00:00:00";
+      AccuracySec = "1s";
+      Persistent = false;
+    };
+  };
+
   programs.bash.loginShellInit = ''
     if [[ $- == *i* && "$USER" == "vinicius" ]]; then
       if [[ -d /mnt/wt-core/watchtowerup ]]; then
@@ -128,16 +137,16 @@ systemd.timers.auto-poweroff = {
     python314
     smartmontools
   ];
-  
- virtualisation.libvirtd = {
-  enable = true;
-  qemu = {
-    package = pkgs.qemu_kvm;
-    swtpm.enable = true;
-    vhostUserPackages=[pkgs.virtiofsd];
+
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      swtpm.enable = true;
+      vhostUserPackages = [ pkgs.virtiofsd ];
+    };
+    onShutdown = "shutdown";
   };
-  onShutdown = "shutdown";
- };
   security.polkit.enable = true;
 
   virtualisation.docker = {
@@ -146,10 +155,10 @@ systemd.timers.auto-poweroff = {
   };
   programs.git.enable = false;
   networking.firewall = {
-    enable=true;
-    allowedTCPPorts=[8096];
+    enable = true;
+    allowedTCPPorts = [ 8096 ];
   };
-  programs.nix-ld.enable=true;
+  programs.nix-ld.enable = true;
   environment.etc."crypttab".text = ''
     watchtower-personal UUID=d7210228-d2d7-4e2f-bb64-ce360035fd49 /var/lib/watchtower/keys/personal.key luks,nofail,headless
     watchtower-core UUID=8d79280b-06d8-4006-9540-325ccf44ae89 /var/lib/watchtower/keys/core-key luks,nofail,headless
@@ -164,46 +173,46 @@ systemd.timers.auto-poweroff = {
     };
     "/mnt/wt-library" = {
       device = "UUID=111c2127-50c6-4005-a541-e2441d7c2cba";
-      fsType="xfs";
-      options=[
+      fsType = "xfs";
+      options = [
         "nofail"
       ];
     };
-   "/mnt/wt-personal" = {
-     device="/dev/mapper/watchtower-personal";
-     fsType="btrfs";
-     options=[
-       "nofail"
-     ];
-   }; 
+    "/mnt/wt-personal" = {
+      device = "/dev/mapper/watchtower-personal";
+      fsType = "btrfs";
+      options = [
+        "nofail"
+      ];
+    };
   };
 
-
   services.nfs.server = {
-  	enable = true;
-  exports = ''
-    /mnt/wt-core    ${IP_WT-LAPTOP}/32(rw,sync,root_squash,no_subtree_check,mp,fsid=101)
-    /mnt/wt-library ${IP_WT-LAPTOP}/32(rw,sync,root_squash,no_subtree_check,mp,fsid=102)
-    /mnt/wt-personal ${IP_WT-LAPTOP}/32(rw,sync,root_squash,no_subtree_check,mp,fsid=103)
-  '';
-   };
-   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 2049 ];
-
+    enable = true;
+    exports = ''
+      /mnt/wt-core    ${IP_WT-LAPTOP}/32(rw,sync,root_squash,no_subtree_check,mp,fsid=101)
+      /mnt/wt-library ${IP_WT-LAPTOP}/32(rw,sync,root_squash,no_subtree_check,mp,fsid=102)
+      /mnt/wt-personal ${IP_WT-LAPTOP}/32(rw,sync,root_squash,no_subtree_check,mp,fsid=103)
+    '';
+  };
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 2049 ];
 
   networking = {
     interfaces.enp3s0 = {
       useDHCP = false;
-      ipv4.addresses = [{
-        address = "192.168.0.100";
-        prefixLength = 24;
-      }];
+      ipv4.addresses = [
+        {
+          address = "192.168.0.100";
+          prefixLength = 24;
+        }
+      ];
     };
     defaultGateway = "192.168.0.1";
     nameservers = [
       "192.168.0.1"
       "1.1.1.1"
     ];
-  }; 
+  };
 
   systemd.services.docker.unitConfig.RequiresMountsFor = [
     "/mnt/wt-core"
@@ -256,13 +265,14 @@ systemd.timers.auto-poweroff = {
     '';
   };
 
-
   #network things
   services = {
     openssh = {
       enable = true;
       openFirewall = true;
-      settings={AllowTCPForwarding=true;};
+      settings = {
+        AllowTCPForwarding = true;
+      };
     };
     tailscale = {
       enable = true;

@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   ...
@@ -71,7 +70,7 @@ in
       input."type:keyboard".xkb_layout = "br";
 
       output = {
-        "*".bg = "${config.watchtower.homeManager.repositoryDirectory}/assets/wallpapers/forest.jpg fill";
+        "*".bg = "${../assets/wallpapers/forest.jpg} fill";
         "eDP-1" = {
           mode = "1920x1080@60Hz";
           position = "0 0";
