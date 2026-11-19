@@ -132,7 +132,6 @@ in
           { app_id = "org.mozilla.firefox"; }
           { app_id = "ai-voice-usage"; }
         ];
-        "2" = [ { app_id = "codium"; } ];
         "9" = [ { app_id = "org.mozilla.thunderbird"; } ];
         "10" = [
           { app_id = "org.telegram.desktop"; }
@@ -147,7 +146,6 @@ in
         "Telegram"
         "zapzap"
         "ai-voice-usage"
-        openWatchtower
       ];
 
       keybindings = lib.mkOptionDefault {

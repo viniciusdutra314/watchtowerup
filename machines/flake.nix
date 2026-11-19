@@ -23,6 +23,7 @@
   
   outputs =
     {
+      self,
       nixpkgs,
       home-manager,
       system-manager,
@@ -38,6 +39,8 @@
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       homeManager = home-manager.packages.x86_64-linux.home-manager;
       systemManager = system-manager.packages.x86_64-linux.default;
+      checksFor = prefix: build:
+        nixpkgs.lib.mapAttrs' (name: config: nixpkgs.lib.nameValuePair "${prefix}-${name}" (build config));
       standaloneManagers = {
         # Home Manager installs its own CLI through programs.home-manager.enable.
         home.packages = [ systemManager ];
@@ -82,6 +85,12 @@
         specialArgs = sharedArgs;
         modules = [ ./wt-laptop/system.nix ];
       };
+
+      checks.x86_64-linux =
+        checksFor "home" (config: config.activationPackage) self.homeConfigurations
+        // checksFor "system" (config: config) self.systemConfigs
+        // checksFor "nixos" (config: config.config.system.build.toplevel) self.nixosConfigurations;
+
       apps.x86_64-linux.home-manager = {
         type = "app";
         program = "${homeManager}/bin/home-manager";
