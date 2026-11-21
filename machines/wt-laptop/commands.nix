@@ -51,6 +51,15 @@ in
   ];
 
   xdg.desktopEntries = {
+    watchtower-mount = {
+      name = "watchtower-mount";
+      comment = "Montar os discos locais ou os compartilhamentos NFS da Watchtower";
+      icon = "${pkgs.adwaita-icon-theme}/share/icons/Adwaita/scalable/devices/drive-harddisk.svg";
+      exec = terminalLauncher "watchtower-mount"
+        "/usr/bin/pkexec --disable-internal-agent ${pkgs.python3}/bin/python3 -I ${../scripts/watchtower-mount.py}";
+      categories = [ "System" ];
+    };
+
     over-engineering-calculator = {
       name = "over-engineering-calculator";
       comment = "Calcular em quanto tempo uma automação se paga";
@@ -73,7 +82,8 @@ in
       name = "home-manager";
       comment = "Aplicar a configuração do usuário neste computador";
       icon = "${iconsDirectory}/home-manager.svg";
-      exec = terminalLauncher "home-manager" "${config.home.profileDirectory}/bin/home-manager switch";
+      exec = terminalLauncher "home-manager"
+        "${config.home.profileDirectory}/bin/home-manager switch --flake path:/mnt/wt-core/watchtowerup/machines";
       categories = [ "System" ];
       settings.Keywords = "home-manager;switch;nix;aplicar;configuração;";
     };

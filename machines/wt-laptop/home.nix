@@ -10,6 +10,7 @@
   home.username = "vinicius";
   home.homeDirectory = "/home/vinicius";
   home.stateVersion = "26.05";
+  programs.home-manager.enable = true;
 
   xdg.configFile."sway/config.d/90-bar.conf".text = ''
     # Waybar iniciada pelo Home Manager/Sway.
@@ -54,7 +55,6 @@
   ];
 
   imports = [
-    ../common/home-manager.nix
     ../common/git.nix
     ./sway.nix
     ../common/zsh.nix

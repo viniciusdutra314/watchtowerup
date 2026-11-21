@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   programs.direnv = {
     enable = true;
@@ -22,7 +22,7 @@
     jujutsu
     just
     lldb
-    mojo-bin
+    (lib.lowPrio mojo-bin)
     ninja
     nixd
     nixfmt

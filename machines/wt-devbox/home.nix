@@ -6,7 +6,6 @@
     ../common/develop.nix
     ../common/cli.nix
     ../common/codex.nix
-    ../common/home-manager.nix
     ../wt-laptop/ssh.nix
   ];
   nixpkgs.config.allowUnfree = true;
@@ -14,5 +13,6 @@
   home.username = "chloe";
   home.homeDirectory = "/home/chloe";
   home.stateVersion = "26.05";
+  programs.home-manager.enable = true;
   targets.genericLinux.enable = true;
 }
