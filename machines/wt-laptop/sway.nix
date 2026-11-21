@@ -33,6 +33,19 @@ in
 
   xdg.desktopEntries.watchtowerup.exec = "${watchtowerLauncher}";
 
+  xdg.configFile."sway/environment".text = ''
+    SWAY_EXTRA_ARGS="$SWAY_EXTRA_ARGS --unsupported-gpu"
+  '';
+  xdg.configFile."sway/config.d/60-bindings-screenshot.conf".text = ''
+    # Print é definido em config.keybindings para abrir o Flameshot.
+    bindsym Alt+Print exec grimshot save active
+    bindsym Ctrl+Print exec grimshot save area
+  '';
+
+  xdg.configFile."sway/config.d/90-swayidle.conf".text = ''
+    # A sessão usa o swayidle definido em extraConfig.
+  '';
+
   xdg.configFile."xdg-desktop-portal/sway-portals.conf".text = ''
     [preferred]
     default=gtk
@@ -165,6 +178,8 @@ in
         timeout 1800 'swaylock -f' \
         timeout 1800 'systemd-ac-power || systemctl suspend' \
         before-sleep 'swaylock -f'
+
+      include '$(/usr/libexec/sway/layered-include "/usr/share/sway/config.d/*.conf" "/etc/sway/config.d/*.conf" "''${XDG_CONFIG_HOME:-$HOME/.config}/sway/config.d/*.conf")'
     '';
   };
 }
