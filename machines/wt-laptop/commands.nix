@@ -78,15 +78,6 @@ in
       settings.Keywords = "home-manager;switch;nix;aplicar;configuração;";
     };
 
-    wt-system-manager-switch = {
-      name = "system-manager";
-      comment = "Aplicar a configuração do sistema neste computador (solicita senha)";
-      icon = "${iconsDirectory}/system-manager.svg";
-      exec = terminalLauncher "system-manager" "${config.home.profileDirectory}/bin/system-manager switch --sudo";
-      categories = [ "System" ];
-      settings.Keywords = "system-manager;switch;nix;sudo;aplicar;configuração;";
-    };
-
     wt-shutdown = {
       name = "shutdown";
       icon = "system-shutdown";

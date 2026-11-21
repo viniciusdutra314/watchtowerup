@@ -22,6 +22,7 @@
     jujutsu
     just
     lldb
+    mojo-bin
     ninja
     nixd
     nixfmt
