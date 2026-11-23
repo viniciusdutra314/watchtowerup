@@ -156,8 +156,8 @@ in
       startup = map (command: { inherit command; }) [
         "firefox"
         "flatpak run org.mozilla.thunderbird"
-        "Telegram"
-        "zapzap"
+        "flatpak run org.telegram.desktop"
+        "flatpak run com.rtosta.zapzap"
         "ai-voice-usage"
       ];
 

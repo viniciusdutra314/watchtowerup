@@ -3,8 +3,6 @@
 from pathlib import Path
 import subprocess
 import sys
-import time
-
 
 def existing_mounts(target):
     result = subprocess.run(
@@ -62,7 +60,6 @@ def mount_disk(target, device, local_options):
 
 
 def main():
-    time.sleep(10)
     for name, uuid, local_options in [
         ("core", "f9ee577d-e5d6-47c8-bca7-1855b30169f6", "nosuid,nodev,subvolid=5"),
         ("library", "111c2127-50c6-4005-a541-e2441d7c2cba", "nosuid,nodev"),

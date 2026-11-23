@@ -42,23 +42,10 @@
   ];
 
   home.packages = with pkgs; [
-    bitwarden-desktop
-    blanket
     flatpak
     flameshot
-    gnome-clocks
-    gnome-network-displays
-    kdePackages.okular
-    libreoffice
-    obs-studio
-    parabolic
-    saber
-    telegram-desktop
     virt-manager
-    vlc
     woomer
-    zapzap
-    zotero
   ];
 
   imports = [
