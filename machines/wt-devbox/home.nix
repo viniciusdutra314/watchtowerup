@@ -10,8 +10,8 @@
   ];
   nixpkgs.config.allowUnfree = true;
   news.display = "silent";
-  home.username = "chloe";
-  home.homeDirectory = "/home/chloe";
+  home.username = "vinicius";
+  home.homeDirectory = "/home/vinicius";
   home.stateVersion = "26.05";
   programs.home-manager.enable = true;
   targets.genericLinux.enable = true;

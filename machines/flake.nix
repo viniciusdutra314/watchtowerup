@@ -41,7 +41,7 @@
           ./wt-laptop/home.nix
         ];
       };
-      homeConfigurations."chloe@wt-devbox" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."vinicius@wt-devbox" = home-manager.lib.homeManagerConfiguration {
         extraSpecialArgs = sharedArgs;
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [ ./wt-devbox/home.nix ];

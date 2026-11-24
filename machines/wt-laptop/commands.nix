@@ -72,7 +72,7 @@ in
 
     watchtowerup = {
       name = "watchtowerup";
-      comment = "Editar configurações no VSCodium · chloe@wt-devbox · workspace 5";
+      comment = "Editar configurações no VSCodium · vinicius@wt-devbox · workspace 5";
       icon = "${iconsDirectory}/watchtowerup.svg";
       categories = [ "Development" ];
       settings.Keywords = "watchtower;watchtowerup;vscodium;nix;configuração;";

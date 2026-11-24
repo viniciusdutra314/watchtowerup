@@ -25,7 +25,7 @@
 
       wt-devbox = {
         HostName = "wt-devbox";
-        User = "chloe";
+        User = "vinicius";
         IdentityFile = DefaultIdentityFile;
         IdentitiesOnly = true;
       };
