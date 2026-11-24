@@ -7,6 +7,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./incus.nix
   ];
   nix.settings.experimental-features = [
     "nix-command"
