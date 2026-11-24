@@ -12,9 +12,14 @@
         name = "flathub";
         location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
       }
+      {
+        name = "vocahq";
+        location = "https://vocahq.github.io/vocalinux-flatpak/vocahq.flatpakrepo";
+      }
     ];
 
     packages = [
+      { appId = "com.vocalinux.Vocalinux"; origin = "vocahq"; }
       "org.audacityteam.Audacity"
       "org.mozilla.thunderbird"
       "com.spotify.Client"

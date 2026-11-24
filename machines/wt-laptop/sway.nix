@@ -158,10 +158,12 @@ in
         "flatpak run org.mozilla.thunderbird"
         "flatpak run org.telegram.desktop"
         "flatpak run com.rtosta.zapzap"
+        "${pkgs.flatpak}/bin/flatpak run com.vocalinux.Vocalinux --start-minimized"
         "ai-voice-usage"
       ];
 
       keybindings = lib.mkOptionDefault {
+        "--no-repeat ${mod}+Shift+v" = "exec --no-startup-id ${pkgs.flatpak}/bin/flatpak run com.vocalinux.Vocalinux --toggle";
         "${mod}+Return" = "exec env GTK_IM_MODULE=simple ghostty --gtk-single-instance=false";
         "${mod}+q" = "kill";
         "${mod}+Shift+q" = null;

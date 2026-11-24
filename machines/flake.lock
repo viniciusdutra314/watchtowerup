@@ -78,29 +78,7 @@
         "ai-voice-usage": "ai-voice-usage",
         "home-manager": "home-manager",
         "nix-flatpak": "nix-flatpak",
-        "nixpkgs": "nixpkgs",
-        "vocalinux": "vocalinux"
-      }
-    },
-    "vocalinux": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1794178334,
-        "narHash": "sha256-Hb+TmB0ZRTsxjM0KNM3WBE0lBHuafTww2+Pz5jhZ5iw=",
-        "owner": "VocaHQ",
-        "repo": "vocalinux",
-        "rev": "56487857c07575c9d16bdca2756afda800e6e320",
-        "type": "github"
-      },
-      "original": {
-        "owner": "VocaHQ",
-        "ref": "v0.18.6",
-        "repo": "vocalinux",
-        "type": "github"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

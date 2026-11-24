@@ -4,14 +4,19 @@ let
   icon = glyph: "<span font_family='Font Awesome 7 Free Solid'>${glyph}</span>";
 
   watchtowerStatus = pkgs.writeShellScript "watchtower-status" ''
-    if ! status="$(${pkgs.tailscale}/bin/tailscale status --json 2>/dev/null)"; then
+    if ! status="$(${pkgs.coreutils}/bin/timeout 2s ${pkgs.tailscale}/bin/tailscale status --json 2>/dev/null)" ||
+      ! echo "$status" | ${pkgs.jq}/bin/jq -e '.BackendState == "Running"' >/dev/null 2>&1; then
       echo '{"text":"WT ?","class":"unknown","tooltip":"Tailscale indisponível"}'
-    elif echo "$status" | ${pkgs.jq}/bin/jq -e \
-      'any(.Peer[]?; .HostName == "watchtower" and .Online == true)' \
+    elif ! echo "$status" | ${pkgs.jq}/bin/jq -e \
+      'any(.Peer[]?; .HostName == "watchtower")' >/dev/null 2>&1; then
+      echo '{"text":"WT ?","class":"unknown","tooltip":"Watchtower ausente da lista de peers do Tailscale"}'
+    # A resposta via DERP também confirma conectividade; Online só reflete o control plane.
+    elif ${pkgs.coreutils}/bin/timeout 3s ${pkgs.tailscale}/bin/tailscale ping \
+      --c 2 --timeout 1s --until-direct=false watchtower \
       >/dev/null 2>&1; then
-      echo '{"text":"WT ●","class":"online","tooltip":"Watchtower online no Tailscale"}'
+      echo '{"text":"WT ●","class":"online","tooltip":"Watchtower respondeu ao ping do Tailscale"}'
     else
-      echo '{"text":"WT ●","class":"offline","tooltip":"Watchtower offline no Tailscale"}'
+      echo '{"text":"WT ●","class":"offline","tooltip":"Watchtower não respondeu ao ping do Tailscale"}'
     fi
   '';
 in
@@ -68,7 +73,7 @@ in
       "custom/watchtower" = {
         exec = watchtowerStatus;
         return-type = "json";
-        interval = 30;
+        interval = 5;
       };
 
       cpu = {
