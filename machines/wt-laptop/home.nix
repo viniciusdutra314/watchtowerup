@@ -28,7 +28,7 @@
 
   home.file = let
     calculator = {
-      source = ../scripts/overenginerring-calculator.py;
+      source = ../../scripts/overenginerring-calculator.py;
       executable = true;
     };
   in {

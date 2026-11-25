@@ -10,15 +10,26 @@ It manages configurations for my home server, virtual machines, containers and p
 
 ### Bootstrapping
 
-On non-NixOS Linux, start with multi-user Nix and flakes enabled. Home Manager
-selects the configuration by `user@hostname`.
+On non-NixOS Linux, start with multi-user Nix and flakes enabled. Run the command
+as the user whose configuration you want to apply. The bootstrap app runs Home
+Manager and applies the profile for `user@hostname`.
+
+To bootstrap Home Manager from GitHub:
 
 ```sh
-nix shell nixpkgs#git
-git clone https://github.com/viniciusdutra314/watchtowerup 
-cd watchtowerup/machines
-nix develop path:.#bootstrap
-home-manager switch --flake path:.
+nix run github:viniciusdutra314/watchtowerup#bootstrap
+```
+
+From the root of a local checkout:
+
+```sh
+nix run .#bootstrap
+```
+
+On `wt-server`, apply the NixOS configuration from the checkout root:
+
+```sh
+sudo nixos-rebuild switch --flake '.'
 ```
 
 ### Chloe — AI Agent

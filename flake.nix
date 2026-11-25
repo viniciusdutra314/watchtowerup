@@ -38,24 +38,24 @@
         modules = [
            nix-flatpak.homeManagerModules.nix-flatpak
           { home.packages = [ ai-voice-usage.packages.${pkgs.stdenv.hostPlatform.system}.default ]; }
-          ./wt-laptop/home.nix
+          ./machines/wt-laptop/home.nix
         ];
       };
       homeConfigurations."vinicius@wt-devbox" = home-manager.lib.homeManagerConfiguration {
         extraSpecialArgs = sharedArgs;
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        modules = [ ./wt-devbox/home.nix ];
+        modules = [ ./machines/wt-devbox/home.nix ];
       };
       nixosConfigurations.wt-server = nixpkgs.lib.nixosSystem {
         specialArgs = sharedArgs;
         system = "x86_64-linux";
         modules = [
-          ./wt-server/system.nix
+          ./machines/wt-server/system.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.extraSpecialArgs = sharedArgs;
-            home-manager.users.vinicius = import ./wt-server/home.nix;
+            home-manager.users.vinicius = import ./machines/wt-server/home.nix;
           }
         ];
       };
@@ -66,6 +66,14 @@
       apps.x86_64-linux.home-manager = {
         type = "app";
         program = "${homeManager}/bin/home-manager";
+      };
+
+      apps.x86_64-linux.bootstrap = {
+        type = "app";
+        program = toString (pkgs.writeShellScript "watchtower-bootstrap" ''
+          exec ${homeManager}/bin/home-manager switch --flake "path:${self.outPath}" "$@"
+        '');
+        meta.description = "Apply the Home Manager profile for the current user and host";
       };
 
       devShells.x86_64-linux.bootstrap = pkgs.mkShellNoCC {

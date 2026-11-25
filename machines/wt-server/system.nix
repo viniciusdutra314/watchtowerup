@@ -14,7 +14,7 @@
     "nix-command"
     "flakes"
   ];
-  environment.etc."nixos/flake.nix".source = "/mnt/wt-core/watchtowerup/machines/flake.nix";
+  environment.etc."nixos/flake.nix".source = "/mnt/wt-core/watchtowerup/flake.nix";
 
   # Desligamento automático à meia-noite
   systemd.services.auto-poweroff = {

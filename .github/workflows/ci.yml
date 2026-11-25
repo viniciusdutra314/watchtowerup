@@ -17,4 +17,4 @@ jobs:
       - uses: cachix/install-nix-action@v31
 
       - name: Evaluate the flake
-        run: nix flake check ./machines --no-build
+        run: nix flake check . --no-build
