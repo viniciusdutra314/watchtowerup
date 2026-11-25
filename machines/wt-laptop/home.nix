@@ -44,7 +44,6 @@
   home.packages = with pkgs; [
     flatpak
     flameshot
-    virt-manager
     woomer
   ];
 

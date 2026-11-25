@@ -1,14 +1,5 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 {
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu = {
-      package = pkgs.qemu_kvm;
-      swtpm.enable = true;
-      vhostUserPackages = [ pkgs.virtiofsd ];
-    };
-    onShutdown = "shutdown";
-  };
   security.polkit.enable = true;
 
   virtualisation.docker = {
@@ -20,30 +11,17 @@
     "/mnt/wt-core"
   ];
 
-  systemd.services.libvirtd.unitConfig.RequiresMountsFor = [
-    "/mnt/wt-core"
-  ];
-
   systemd.services.wt-startup = {
-    description = "Start Watchtower containers and development VM";
+    description = "Start Watchtower containers";
     wantedBy = [ "multi-user.target" ];
-    requires = [
-      "docker.service"
-      "libvirtd.service"
-    ];
-    after = [
-      "docker.service"
-      "libvirtd.service"
-    ];
+    requires = [ "docker.service" ];
+    after = [ "docker.service" ];
     unitConfig.RequiresMountsFor = [
       "/mnt/wt-core"
       "/mnt/wt-library"
       "/mnt/wt-personal"
     ];
-    path = [
-      config.virtualisation.docker.package
-      config.virtualisation.libvirtd.package
-    ];
+    path = [ config.virtualisation.docker.package ];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
