@@ -95,6 +95,7 @@ in
       terminal = "ghostty";
       menu = "${pkgs.fuzzel}/bin/fuzzel";
       workspaceLayout = "tabbed";
+      focus.wrapping = "workspace";
       bars = [ ];
       window = {
         titlebar = false;

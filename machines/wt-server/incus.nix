@@ -22,19 +22,4 @@ in
       67
     ];
   };
-
-  fileSystems."/var/lib/incus" = {
-    device = "/mnt/wt-core/incus";
-    fsType = "none";
-    depends = [ "/mnt/wt-core" ];
-    options = [
-      "bind"
-      "nofail"
-    ];
-  };
-
-  # The daemon and sockets must wait for the SSD before writing any state.
-  systemd.sockets.incus.unitConfig.RequiresMountsFor = [ "/var/lib/incus" ];
-  systemd.sockets.incus-user.unitConfig.RequiresMountsFor = [ "/var/lib/incus" ];
-  systemd.services.incus.unitConfig.RequiresMountsFor = [ "/var/lib/incus" ];
 }
