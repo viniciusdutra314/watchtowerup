@@ -8,6 +8,7 @@
     imagemagick
     jq
     speedtest-cli
+    ncurses
     neovim
     psmisc
     ripgrep

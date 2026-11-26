@@ -40,3 +40,6 @@ The chloe/ directory contains the configuration and customization of AI agents, 
 
 > [!NOTE]
 > Fun fact: Watchtower is a reference to the TV series Smallville, where Chloe Sullivan operates the Watchtower as a headquarters for coordinating the team.
+
+> [!CAUTION]
+> The repository includes an [`AGENTS.md`](AGENTS.md) that makes it practical to edit these configurations with an AI agent. Set up the agent's sandbox to allow edits in the checkout and block it from applying them. Applying changes is a manual step, since activation could let the agent modify its own environment or permissions.

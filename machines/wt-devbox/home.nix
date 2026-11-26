@@ -6,7 +6,6 @@
     ../common/develop.nix
     ../common/cli.nix
     ../common/codex.nix
-    ../wt-laptop/ssh.nix
   ];
   nixpkgs.config.allowUnfree = true;
   news.display = "silent";
